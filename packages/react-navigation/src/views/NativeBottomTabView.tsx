@@ -49,6 +49,7 @@ export default function NativeBottomTabView({
       getTestID={({ route }) =>
         descriptors[route.key]?.options.tabBarButtonTestID
       }
+      getRole={({ route }) => descriptors[route.key]?.options.role}
       tabBar={
         tabBar ? () => tabBar({ state, descriptors, navigation }) : undefined
       }

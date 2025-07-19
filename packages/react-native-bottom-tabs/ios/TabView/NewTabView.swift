@@ -28,7 +28,7 @@ struct NewTabView: AnyTabView {
               onSelect: onSelect
             )
 
-            Tab(value: tabData.key) {
+            Tab(value: tabData.key, role: tabData.role?.convert()) {
               child
                 .ignoresSafeArea(.container, edges: .all)
                 .tabAppear(using: context)
