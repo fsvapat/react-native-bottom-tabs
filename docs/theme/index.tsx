@@ -13,7 +13,7 @@ import {
 import {
   HomeLayout as RspressHomeLayout,
   Layout as RspressLayout,
-} from 'rspress/theme';
+} from '@rspress/core/theme';
 
 // You can customize the default Layout and HomeLayout like this:
 const Layout = () => (
@@ -44,4 +44,4 @@ export {
 };
 
 // Export the default theme components
-export * from 'rspress/theme';
+export * from '@rspress/core/theme';
