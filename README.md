@@ -22,7 +22,7 @@ https://github.com/user-attachments/assets/09e96ac3-827d-4ac0-add0-e7b88ee9197c
 
 | Platform |  |
 |:---:|:---:|
-| **iOS** | <img src="https://github.com/user-attachments/assets/93689d5f-2ea6-457d-8e0b-a7da6bd7018b" width="400" /> |
+| **iOS** | <img src="https://github.com/user-attachments/assets/bd737e01-d7be-44f2-a0b6-67664e670933" width="400" /> |
 | **Android** | <img src="https://github.com/user-attachments/assets/5120a6d0-be92-44cf-a3bf-668944ad9475" width="400" /> |
 | **iPadOS** | <img src="https://github.com/user-attachments/assets/1504949f-ed36-44cc-9153-373f9e584f44" width="400" /> |
 | **visionOS** | <img src="https://github.com/user-attachments/assets/7d990950-b9bb-4a42-ab0c-fac975ffd098" width="400" /> |
