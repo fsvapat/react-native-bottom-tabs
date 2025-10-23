@@ -385,12 +385,9 @@ const TabView = <Route extends BaseRoute>({
     [onSearchSubmit]
   );
 
-  const handleSearchDismiss = React.useCallback(
-    () => {
-      onSearchDismiss?.();
-    },
-    [onSearchDismiss]
-  );
+  const handleSearchDismiss = React.useCallback(() => {
+    onSearchDismiss?.();
+  }, [onSearchDismiss]);
 
   useLayoutEffect(() => {
     // If we are rendering a custom tab bar, we need to measure it to set the tab bar height.
