@@ -41,6 +41,9 @@ struct TabViewImpl: View {
   var onLongPress: (_ key: String) -> Void
   var onLayout: (_ size: CGSize) -> Void
   var onTabBarMeasured: (_ height: Int) -> Void
+  var onSearchTextChange: (_ text: String) -> Void
+  var onSearchSubmit: (_ text: String) -> Void
+  var onSearchDismiss: () -> Void
 
   var body: some View {
     tabContent
@@ -60,6 +63,12 @@ struct TabViewImpl: View {
           return item?.preventsDefault ?? false
         }
       #endif
+      .searchableModifier(
+        props: props,
+        onTextChange: onSearchTextChange,
+        onSubmit: onSearchSubmit,
+        onDismiss: onSearchDismiss
+      )
       .introspectTabView { tabController in
 #if !os(macOS)
         tabController.view.backgroundColor = .clear
@@ -321,6 +330,36 @@ extension View {
     if #available(iOS 15.0, tvOS 15.0, macOS 13.0, *) {
       self
         .environment(\.symbolVariants, .none)
+    } else {
+      self
+    }
+  }
+
+  @ViewBuilder
+  func searchableModifier(
+    props: TabViewProps,
+    onTextChange: @escaping (String) -> Void,
+    onSubmit: @escaping (String) -> Void,
+    onDismiss: @escaping () -> Void
+  ) -> some View {
+    if #available(iOS 26.0, *) {
+      if props.searchable {
+        self.searchable(
+          text: Binding(
+            get: { props.searchableText },
+            set: { newValue in
+              props.searchableText = newValue
+              onTextChange(newValue)
+            }
+          ),
+          prompt: props.searchablePrompt.map { Text($0) }
+        )
+        .onSubmit(of: .search) {
+          onSubmit(props.searchableText)
+        }
+      } else {
+        self
+      }
     } else {
       self
     }

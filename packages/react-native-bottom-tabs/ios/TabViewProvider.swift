@@ -43,6 +43,9 @@ public final class TabInfo: NSObject {
   func onLongPress(key: String, reactTag: NSNumber?)
   func onTabBarMeasured(height: Int, reactTag: NSNumber?)
   func onLayout(size: CGSize, reactTag: NSNumber?)
+  func onSearchTextChange(text: String, reactTag: NSNumber?)
+  func onSearchSubmit(text: String, reactTag: NSNumber?)
+  func onSearchDismiss(reactTag: NSNumber?)
 }
 
 @objc public class TabViewProvider: PlatformView {
@@ -58,6 +61,9 @@ public final class TabInfo: NSObject {
   @objc var onTabLongPress: RCTDirectEventBlock?
   @objc var onTabBarMeasured: RCTDirectEventBlock?
   @objc var onNativeLayout: RCTDirectEventBlock?
+  @objc var onSearchTextChange: RCTDirectEventBlock?
+  @objc var onSearchSubmit: RCTDirectEventBlock?
+  @objc var onSearchDismiss: RCTDirectEventBlock?
 
   @objc public var icons: NSArray? {
     didSet {
@@ -161,6 +167,18 @@ public final class TabInfo: NSObject {
     }
   }
 
+  @objc public var searchable: Bool = false {
+    didSet {
+      props.searchable = searchable
+    }
+  }
+
+  @objc public var searchablePrompt: NSString? {
+    didSet {
+      props.searchablePrompt = searchablePrompt as? String
+    }
+  }
+
   @objc public convenience init(delegate: TabViewProviderDelegate) {
     self.init()
     self.delegate = delegate
@@ -200,6 +218,12 @@ public final class TabInfo: NSObject {
       self.delegate?.onLayout(size: size, reactTag: self.reactTag)
     } onTabBarMeasured: { height in
       self.delegate?.onTabBarMeasured(height: height, reactTag: self.reactTag)
+    } onSearchTextChange: { text in
+      self.delegate?.onSearchTextChange(text: text, reactTag: self.reactTag)
+    } onSearchSubmit: { text in
+      self.delegate?.onSearchSubmit(text: text, reactTag: self.reactTag)
+    } onSearchDismiss: {
+      self.delegate?.onSearchDismiss(reactTag: self.reactTag)
     })
 
     if let hostingController = self.hostingController, let parentViewController = reactViewController() {

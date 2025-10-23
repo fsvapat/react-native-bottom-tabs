@@ -119,7 +119,7 @@ using namespace facebook::react;
   if (oldViewProps.sidebarAdaptable != newViewProps.sidebarAdaptable) {
     _tabViewProvider.sidebarAdaptable = newViewProps.sidebarAdaptable;
   }
-  
+
   if (oldViewProps.minimizeBehavior != newViewProps.minimizeBehavior) {
     _tabViewProvider.minimizeBehavior = RCTNSStringFromString(newViewProps.minimizeBehavior);
   }
@@ -176,6 +176,13 @@ using namespace facebook::react;
     _tabViewProvider.tabBarHidden = newViewProps.tabBarHidden;
   }
 
+  if (oldViewProps.searchable != newViewProps.searchable) {
+    _tabViewProvider.searchable = newViewProps.searchable;
+  }
+
+  if (oldViewProps.searchablePrompt != newViewProps.searchablePrompt) {
+    _tabViewProvider.searchablePrompt = RCTNSStringFromString(newViewProps.searchablePrompt);
+  }
 
   [super updateProps:props oldProps:oldProps];
 }
@@ -246,6 +253,31 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
       .height = size.height,
       .width = size.width
     });
+  }
+}
+
+- (void)onSearchTextChangeWithText:(NSString *)text reactTag:(NSNumber *)reactTag {
+  auto eventEmitter = std::static_pointer_cast<const RNCTabViewEventEmitter>(_eventEmitter);
+  if (eventEmitter) {
+    eventEmitter->onSearchTextChange(RNCTabViewEventEmitter::OnSearchTextChange{
+      .text = [text cStringUsingEncoding:kCFStringEncodingUTF8]
+    });
+  }
+}
+
+- (void)onSearchSubmitWithText:(NSString *)text reactTag:(NSNumber *)reactTag {
+  auto eventEmitter = std::static_pointer_cast<const RNCTabViewEventEmitter>(_eventEmitter);
+  if (eventEmitter) {
+    eventEmitter->onSearchSubmit(RNCTabViewEventEmitter::OnSearchSubmit{
+      .text = [text cStringUsingEncoding:kCFStringEncodingUTF8]
+    });
+  }
+}
+
+- (void)onSearchDismissWithReactTag:(NSNumber *)reactTag {
+  auto eventEmitter = std::static_pointer_cast<const RNCTabViewEventEmitter>(_eventEmitter);
+  if (eventEmitter) {
+    eventEmitter->onSearchDismiss(RNCTabViewEventEmitter::OnSearchDismiss{});
   }
 }
 

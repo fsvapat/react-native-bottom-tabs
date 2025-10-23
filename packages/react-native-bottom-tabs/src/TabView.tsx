@@ -3,6 +3,8 @@ import type {
   OnNativeLayout,
   OnPageSelectedEventData,
   OnTabBarMeasured,
+  OnSearchTextChange,
+  OnSearchSubmit,
   TabViewItems,
 } from './TabViewNativeComponent';
 import {
@@ -112,6 +114,26 @@ interface Props<Route extends BaseRoute> {
    */
   getPreventsDefault?: (props: { route: Route }) => boolean | undefined;
   /**
+   * Enable searchable functionality (iOS 26+)
+   */
+  searchable?: boolean;
+  /**
+   * Placeholder text for the search field (iOS 26+)
+   */
+  searchablePrompt?: string;
+  /**
+   * Callback when search text changes (iOS 26+)
+   */
+  onSearchTextChange?: (text: string) => void;
+  /**
+   * Callback when search is submitted (iOS 26+)
+   */
+  onSearchSubmit?: (text: string) => void;
+  /**
+   * Callback when search is dismissed (iOS 26+)
+   */
+  onSearchDismiss?: () => void;
+  /**
    * Get icon for the tab, uses `route.focusedIcon` by default.
    */
   getIcon?: (props: {
@@ -209,6 +231,11 @@ const TabView = <Route extends BaseRoute>({
   getRole = ({ route }: { route: Route }) => route.role,
   getSceneStyle = ({ route }: { route: Route }) => route.style,
   getPreventsDefault = ({ route }: { route: Route }) => route.preventsDefault,
+  searchable = false,
+  searchablePrompt,
+  onSearchTextChange,
+  onSearchSubmit,
+  onSearchDismiss,
   hapticFeedbackEnabled = false,
   // Android's native behavior is to show labels when there are less than 4 tabs. We leave it as undefined to use the platform default behavior.
   labeled = Platform.OS !== 'android' ? true : undefined,
@@ -344,6 +371,27 @@ const TabView = <Route extends BaseRoute>({
     [setMeasuredDimensions]
   );
 
+  const handleSearchTextChange = React.useCallback(
+    ({ nativeEvent: { text } }: { nativeEvent: OnSearchTextChange }) => {
+      onSearchTextChange?.(text);
+    },
+    [onSearchTextChange]
+  );
+
+  const handleSearchSubmit = React.useCallback(
+    ({ nativeEvent: { text } }: { nativeEvent: OnSearchSubmit }) => {
+      onSearchSubmit?.(text);
+    },
+    [onSearchSubmit]
+  );
+
+  const handleSearchDismiss = React.useCallback(
+    () => {
+      onSearchDismiss?.();
+    },
+    [onSearchDismiss]
+  );
+
   useLayoutEffect(() => {
     // If we are rendering a custom tab bar, we need to measure it to set the tab bar height.
     if (renderCustomTabBar && customTabBarWrapperRef.current) {
@@ -368,6 +416,11 @@ const TabView = <Route extends BaseRoute>({
         onPageSelected={handlePageSelected}
         onTabBarMeasured={handleTabBarMeasured}
         onNativeLayout={handleNativeLayout}
+        searchable={searchable}
+        searchablePrompt={searchablePrompt}
+        onSearchTextChange={handleSearchTextChange}
+        onSearchSubmit={handleSearchSubmit}
+        onSearchDismiss={handleSearchDismiss}
         hapticFeedbackEnabled={hapticFeedbackEnabled}
         activeTintColor={activeTintColor}
         inactiveTintColor={inactiveTintColor}
