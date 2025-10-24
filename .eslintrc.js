@@ -2,6 +2,9 @@ module.exports = {
   root: true,
   extends: ['@react-native', 'prettier'],
   plugins: ['prettier'],
+  parserOptions: {
+    requireConfigFile: false,
+  },
   rules: {
     'react/react-in-jsx-scope': 'off',
     'prettier/prettier': [
@@ -20,5 +23,6 @@ module.exports = {
     '**/dist/**',
     '**/node_modules/**',
     'expo-env.d.ts',
+    '**/metro.config.js',
   ],
 };
