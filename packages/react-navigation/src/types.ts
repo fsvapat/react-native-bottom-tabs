@@ -110,6 +110,12 @@ export type NativeBottomTabNavigationOptions = {
    * Whether to prevent default action of the tab. Defaults to `false`.
    */
   preventsDefault?: boolean;
+
+  searchable?: boolean;
+  searchablePrompt?: string;
+  onSearchTextChange?: (text: string) => void;
+  onSearchSubmit?: (text: string) => void;
+  onSearchDismiss?: () => void;
 };
 
 export type NativeBottomTabDescriptor = Descriptor<
@@ -153,4 +159,9 @@ export type NativeBottomTabNavigationConfig = Partial<
   >
 > & {
   tabBar?: (props: BottomTabBarProps) => React.ReactNode;
+  searchable?: boolean;
+  searchablePrompt?: string;
+  onSearchTextChange?: (text: string) => void;
+  onSearchSubmit?: (text: string) => void;
+  onSearchDismiss?: () => void;
 };

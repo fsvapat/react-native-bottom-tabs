@@ -7,6 +7,9 @@ struct NewTabView: AnyTabView {
   var onLayout: (CGSize) -> Void
   var onSelect: (String) -> Void
   var updateTabBarAppearance: () -> Void
+  var onSearchTextChange: (String) -> Void
+  var onSearchSubmit: (String) -> Void
+  var onSearchDismiss: () -> Void
 
   @ViewBuilder
   var body: some View {
@@ -32,6 +35,12 @@ struct NewTabView: AnyTabView {
                 .ignoresSafeArea(.container, edges: .all)
                 .tabAppear(using: context)
                 .hideTabBar(props.tabBarHidden)
+                .searchableModifier(
+                  props: props,
+                  onTextChange: onSearchTextChange,
+                  onSubmit: onSearchSubmit,
+                  onDismiss: onSearchDismiss
+                )
             } label: {
               TabItem(
                 title: tabData.title,

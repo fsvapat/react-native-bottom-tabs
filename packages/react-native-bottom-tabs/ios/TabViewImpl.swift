@@ -18,7 +18,10 @@ struct TabViewImpl: View {
       NewTabView(
         props: props,
         onLayout: onLayout,
-        onSelect: onSelect
+        onSelect: onSelect,
+        onSearchTextChange: onSearchTextChange,
+        onSearchSubmit: onSearchSubmit,
+        onSearchDismiss: onSearchDismiss
       ) {
         #if !os(macOS)
         updateTabBarAppearance(props: props, tabBar: tabBar)
@@ -28,7 +31,10 @@ struct TabViewImpl: View {
       LegacyTabView(
         props: props,
         onLayout: onLayout,
-        onSelect: onSelect
+        onSelect: onSelect,
+        onSearchTextChange: onSearchTextChange,
+        onSearchSubmit: onSearchSubmit,
+        onSearchDismiss: onSearchDismiss
       ) {
         #if !os(macOS)
         updateTabBarAppearance(props: props, tabBar: tabBar)
@@ -63,12 +69,6 @@ struct TabViewImpl: View {
           return item?.preventsDefault ?? false
         }
       #endif
-      .searchableModifier(
-        props: props,
-        onTextChange: onSearchTextChange,
-        onSubmit: onSearchSubmit,
-        onDismiss: onSearchDismiss
-      )
       .introspectTabView { tabController in
 #if !os(macOS)
         tabController.view.backgroundColor = .clear
@@ -344,18 +344,13 @@ extension View {
   ) -> some View {
     if #available(iOS 26.0, *) {
       if props.searchable {
-        self.searchable(
-          text: Binding(
-            get: { props.searchableText },
-            set: { newValue in
-              props.searchableText = newValue
-              onTextChange(newValue)
-            }
-          ),
-          prompt: props.searchablePrompt.map { Text($0) }
-        )
-        .onSubmit(of: .search) {
-          onSubmit(props.searchableText)
+        SearchableModifierView(
+          prompt: props.searchablePrompt,
+          onTextChange: onTextChange,
+          onSubmit: onSubmit,
+          onDismiss: onDismiss
+        ) {
+          self
         }
       } else {
         self
@@ -363,5 +358,35 @@ extension View {
     } else {
       self
     }
+  }
+}
+
+struct SearchableModifierView<Content: View>: View {
+  let prompt: String?
+  let onTextChange: (String) -> Void
+  let onSubmit: (String) -> Void
+  let onDismiss: () -> Void
+  let content: () -> Content
+
+  @State private var searchText: String = ""
+
+  var body: some View {
+    content()
+      .searchable(
+        text: Binding(
+          get: { searchText },
+          set: { newValue in
+            searchText = newValue
+            onTextChange(newValue)
+          }
+        ),
+        prompt: prompt.map { Text($0) }
+      )
+      .onSubmit(of: .search) {
+        onSubmit(searchText)
+      }
+      .onDismiss(of: .search) {
+        onDismiss()
+      }
   }
 }

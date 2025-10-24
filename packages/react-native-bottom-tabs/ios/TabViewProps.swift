@@ -72,7 +72,6 @@ class TabViewProps: ObservableObject {
   @Published var tabBarHidden: Bool = false
   @Published var searchable: Bool = false
   @Published var searchablePrompt: String?
-  @Published var searchableText: String = ""
 
   var selectedActiveTintColor: PlatformColor? {
     if let selectedPage,
