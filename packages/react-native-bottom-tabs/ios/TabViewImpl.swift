@@ -19,27 +19,29 @@ struct TabViewImpl: View {
         props: props,
         onLayout: onLayout,
         onSelect: onSelect,
+        updateTabBarAppearance: {
+          #if !os(macOS)
+          updateTabBarAppearance(props: props, tabBar: tabBar)
+          #endif
+        },
         onSearchTextChange: onSearchTextChange,
         onSearchSubmit: onSearchSubmit,
         onSearchDismiss: onSearchDismiss
-      ) {
-        #if !os(macOS)
-        updateTabBarAppearance(props: props, tabBar: tabBar)
-        #endif
-      }
+      )
     } else {
       LegacyTabView(
         props: props,
         onLayout: onLayout,
         onSelect: onSelect,
+        updateTabBarAppearance: {
+          #if !os(macOS)
+          updateTabBarAppearance(props: props, tabBar: tabBar)
+          #endif
+        },
         onSearchTextChange: onSearchTextChange,
         onSearchSubmit: onSearchSubmit,
         onSearchDismiss: onSearchDismiss
-      ) {
-        #if !os(macOS)
-        updateTabBarAppearance(props: props, tabBar: tabBar)
-        #endif
-      }
+      )
     }
   }
 
