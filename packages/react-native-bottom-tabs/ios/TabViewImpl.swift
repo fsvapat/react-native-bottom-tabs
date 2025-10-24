@@ -373,8 +373,9 @@ struct SearchableModifierView<Content: View>: View {
   @State private var searchText: String = ""
 
   var body: some View {
+    NavigationStack {
     content()
-      .searchable(
+   }.searchable(
         text: Binding(
           get: { searchText },
           set: { newValue in
@@ -386,9 +387,6 @@ struct SearchableModifierView<Content: View>: View {
       )
       .onSubmit(of: .search) {
         onSubmit(searchText)
-      }
-      .onDismiss(of: .search) {
-        onDismiss()
       }
   }
 }
