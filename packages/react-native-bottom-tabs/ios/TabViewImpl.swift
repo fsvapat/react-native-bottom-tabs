@@ -345,16 +345,12 @@ extension View {
     onDismiss: @escaping () -> Void
   ) -> some View {
     if #available(iOS 26.0, *) {
-      if props.searchable {
-        SearchableModifierView(
-          prompt: props.searchablePrompt,
-          onTextChange: onTextChange,
-          onSubmit: onSubmit,
-          onDismiss: onDismiss
-        ) {
-          self
-        }
-      } else {
+      SearchableModifierView(
+        prompt: props.searchablePrompt,
+        onTextChange: onTextChange,
+        onSubmit: onSubmit,
+        onDismiss: onDismiss
+      ) {
         self
       }
     } else {
@@ -373,20 +369,24 @@ struct SearchableModifierView<Content: View>: View {
   @State private var searchText: String = ""
 
   var body: some View {
-    NavigationStack {
-    content()
-   }.searchable(
-        text: Binding(
-          get: { searchText },
-          set: { newValue in
-            searchText = newValue
-            onTextChange(newValue)
+      if #available(iOS 16.0, *) {
+          NavigationStack {
+              content()
+          }.searchable(
+            text: Binding(
+                get: { searchText },
+                set: { newValue in
+                    searchText = newValue
+                    onTextChange(newValue)
+                }
+            ),
+            prompt: prompt.map { Text($0) }
+          )
+          .onSubmit(of: .search) {
+              onSubmit(searchText)
           }
-        ),
-        prompt: prompt.map { Text($0) }
-      )
-      .onSubmit(of: .search) {
-        onSubmit(searchText)
+      } else {
+          // Fallback on earlier versions
       }
   }
 }
