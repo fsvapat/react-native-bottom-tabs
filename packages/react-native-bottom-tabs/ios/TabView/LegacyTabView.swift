@@ -44,7 +44,8 @@ struct LegacyTabView: AnyTabView {
         RepresentableView(view: child)
           .ignoresSafeArea(.container, edges: .all)
           .searchableModifier(
-            props: props,
+            searchable: tabData.searchable,
+            searchablePrompt: tabData.searchablePrompt,
             onTextChange: onSearchTextChange,
             onSubmit: onSearchSubmit,
             onDismiss: onSearchDismiss

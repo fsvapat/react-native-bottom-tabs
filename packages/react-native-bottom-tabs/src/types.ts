@@ -21,6 +21,8 @@ export type BaseRoute = {
   freezeOnBlur?: boolean;
   style?: StyleProp<ViewStyle>;
   preventsDefault?: boolean;
+  searchable?: boolean;
+  searchablePrompt?: string;
 };
 
 export type NavigationState<Route extends BaseRoute> = {

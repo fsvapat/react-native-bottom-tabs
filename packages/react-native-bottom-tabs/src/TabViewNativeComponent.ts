@@ -1,4 +1,3 @@
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import type { ColorValue, ProcessedColorValue, ViewProps } from 'react-native';
 import type {
   DirectEventHandler,
@@ -6,6 +5,7 @@ import type {
   Int32,
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
+import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 //@ts-ignore
 import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';
 
@@ -24,13 +24,17 @@ export type OnNativeLayout = Readonly<{
 
 export type OnSearchTextChange = Readonly<{
   text: string;
+  key: string;
 }>;
 
 export type OnSearchSubmit = Readonly<{
   text: string;
+  key: string;
 }>;
 
-export type OnSearchDismiss = Readonly<{}>;
+export type OnSearchDismiss = Readonly<{
+  key: string;
+}>;
 
 export type TabViewItems = ReadonlyArray<{
   key: string;
@@ -42,6 +46,8 @@ export type TabViewItems = ReadonlyArray<{
   testID?: string;
   role?: string;
   preventsDefault?: boolean;
+  searchable?: boolean;
+  searchablePrompt?: string;
 }>;
 
 export interface TabViewProps extends ViewProps {
@@ -68,8 +74,6 @@ export interface TabViewProps extends ViewProps {
   fontFamily?: string;
   fontWeight?: string;
   fontSize?: Int32;
-  searchable?: boolean;
-  searchablePrompt?: string;
   onSearchTextChange?: DirectEventHandler<OnSearchTextChange>;
   onSearchSubmit?: DirectEventHandler<OnSearchSubmit>;
   onSearchDismiss?: DirectEventHandler<OnSearchDismiss>;

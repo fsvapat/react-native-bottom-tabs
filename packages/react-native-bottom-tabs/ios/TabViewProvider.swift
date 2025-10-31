@@ -13,6 +13,8 @@ public final class TabInfo: NSObject {
   public let testID: String?
   public let role: TabBarRole?
   public let preventsDefault: Bool
+  public let searchable: Bool
+  public let searchablePrompt: String?
 
   public init(
     key: String,
@@ -23,7 +25,9 @@ public final class TabInfo: NSObject {
     hidden: Bool,
     testID: String?,
     role: String?,
-    preventsDefault: Bool = false
+    preventsDefault: Bool = false,
+    searchable: Bool = false,
+    searchablePrompt: String?,
   ) {
     self.key = key
     self.title = title
@@ -34,6 +38,8 @@ public final class TabInfo: NSObject {
     self.testID = testID
     self.role = TabBarRole(rawValue: role ?? "")
     self.preventsDefault = preventsDefault
+    self.searchable = searchable
+    self.searchablePrompt = searchablePrompt
     super.init()
   }
 }
@@ -164,18 +170,6 @@ public final class TabInfo: NSObject {
   @objc public var itemsData: [TabInfo] = [] {
     didSet {
       props.items = itemsData
-    }
-  }
-
-  @objc public var searchable: Bool = false {
-    didSet {
-      props.searchable = searchable
-    }
-  }
-
-  @objc public var searchablePrompt: NSString? {
-    didSet {
-      props.searchablePrompt = searchablePrompt as? String
     }
   }
 

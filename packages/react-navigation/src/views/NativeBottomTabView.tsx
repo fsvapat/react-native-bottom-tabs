@@ -1,15 +1,15 @@
 import {
   type ParamListBase,
-  type TabNavigationState,
   type Route,
+  type TabNavigationState,
   CommonActions,
 } from '@react-navigation/native';
+import TabView from 'react-native-bottom-tabs';
 import type {
   NativeBottomTabDescriptorMap,
   NativeBottomTabNavigationConfig,
   NativeBottomTabNavigationHelpers,
 } from '../types';
-import TabView from 'react-native-bottom-tabs';
 
 type Props = NativeBottomTabNavigationConfig & {
   state: TabNavigationState<ParamListBase>;
@@ -27,6 +27,12 @@ export default function NativeBottomTabView({
   return (
     <TabView
       {...rest}
+      getSearchable={({ route }) => {
+        return descriptors[route.key]?.options.searchable;
+      }}
+      getSearchablePrompt={({ route }) => {
+        return descriptors[route.key]?.options.searchablePrompt;
+      }}
       navigationState={state}
       renderScene={({ route }) => descriptors[route.key]?.render()}
       getActiveTintColor={({ route }) => {

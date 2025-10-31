@@ -36,7 +36,8 @@ struct NewTabView: AnyTabView {
                 .tabAppear(using: context)
                 .hideTabBar(props.tabBarHidden)
                 .searchableModifier(
-                  props: props,
+                  searchable: tabData.searchable,
+                  searchablePrompt: tabData.searchablePrompt,
                   onTextChange: onSearchTextChange,
                   onSubmit: onSearchSubmit,
                   onDismiss: onSearchDismiss

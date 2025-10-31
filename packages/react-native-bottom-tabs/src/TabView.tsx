@@ -1,12 +1,4 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import type {
-  OnNativeLayout,
-  OnPageSelectedEventData,
-  OnTabBarMeasured,
-  OnSearchTextChange,
-  OnSearchSubmit,
-  TabViewItems,
-} from './TabViewNativeComponent';
 import {
   type ColorValue,
   type DimensionValue,
@@ -18,14 +10,22 @@ import {
   type ViewStyle,
   processColor,
 } from 'react-native';
+import type {
+  OnNativeLayout,
+  OnPageSelectedEventData,
+  OnSearchSubmit,
+  OnSearchTextChange,
+  OnTabBarMeasured,
+  TabViewItems,
+} from './TabViewNativeComponent';
 import { BottomTabBarHeightContext } from './utils/BottomTabBarHeightContext';
 
 // eslint-disable-next-line @react-native/no-deep-imports
 import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';
-import NativeTabView from './TabViewNativeComponent';
 import useLatestCallback from 'use-latest-callback';
-import type { AppleIcon, BaseRoute, NavigationState, TabRole } from './types';
 import DelayedFreeze from './DelayedFreeze';
+import NativeTabView from './TabViewNativeComponent';
+import type { AppleIcon, BaseRoute, NavigationState, TabRole } from './types';
 
 const isAppleSymbol = (icon: any): icon is { sfSymbol: string } =>
   icon?.sfSymbol;
@@ -116,11 +116,11 @@ interface Props<Route extends BaseRoute> {
   /**
    * Enable searchable functionality (iOS 26+)
    */
-  searchable?: boolean;
+  getSearchable?: (props: { route: Route }) => boolean | undefined;
   /**
    * Placeholder text for the search field (iOS 26+)
    */
-  searchablePrompt?: string;
+  getSearchablePrompt?: (props: { route: Route }) => string | undefined;
   /**
    * Callback when search text changes (iOS 26+)
    */
@@ -231,8 +231,8 @@ const TabView = <Route extends BaseRoute>({
   getRole = ({ route }: { route: Route }) => route.role,
   getSceneStyle = ({ route }: { route: Route }) => route.style,
   getPreventsDefault = ({ route }: { route: Route }) => route.preventsDefault,
-  searchable = false,
-  searchablePrompt,
+  getSearchable = ({ route }: { route: Route }) => route.searchable,
+  getSearchablePrompt = ({ route }: { route: Route }) => route.searchablePrompt,
   onSearchTextChange,
   onSearchSubmit,
   onSearchDismiss,
@@ -309,9 +309,13 @@ const TabView = <Route extends BaseRoute>({
           testID: getTestID?.({ route }),
           role: getRole?.({ route }),
           preventsDefault: getPreventsDefault?.({ route }),
+          searchable: getSearchable?.({ route }),
+          searchablePrompt: getSearchablePrompt?.({ route }),
         };
       }),
     [
+      getSearchable,
+      getSearchablePrompt,
       trimmedRoutes,
       icons,
       getLabelText,
@@ -413,8 +417,6 @@ const TabView = <Route extends BaseRoute>({
         onPageSelected={handlePageSelected}
         onTabBarMeasured={handleTabBarMeasured}
         onNativeLayout={handleNativeLayout}
-        searchable={searchable}
-        searchablePrompt={searchablePrompt}
         onSearchTextChange={handleSearchTextChange}
         onSearchSubmit={handleSearchSubmit}
         onSearchDismiss={handleSearchDismiss}

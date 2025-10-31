@@ -339,18 +339,23 @@ extension View {
 
   @ViewBuilder
   func searchableModifier(
-    props: TabViewProps,
+    searchable: Bool,
+    searchablePrompt: String?,
     onTextChange: @escaping (String) -> Void,
     onSubmit: @escaping (String) -> Void,
     onDismiss: @escaping () -> Void
   ) -> some View {
     if #available(iOS 26.0, *) {
-      SearchableModifierView(
-        prompt: props.searchablePrompt,
-        onTextChange: onTextChange,
-        onSubmit: onSubmit,
-        onDismiss: onDismiss
-      ) {
+      if searchable {
+        SearchableModifierView(
+          prompt: searchablePrompt,
+          onTextChange: onTextChange,
+          onSubmit: onSubmit,
+          onDismiss: onDismiss
+        ) {
+          self
+        }
+      } else {
         self
       }
     } else {

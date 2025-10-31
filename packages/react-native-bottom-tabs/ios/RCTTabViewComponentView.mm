@@ -32,15 +32,13 @@ typedef UIView PlatformView;
 namespace facebook::react {
 
 bool operator==(const RNCTabViewItemsStruct& lhs, const RNCTabViewItemsStruct& rhs) {
-  return lhs.key == rhs.key &&
-  lhs.title == rhs.title &&
-  lhs.sfSymbol == rhs.sfSymbol &&
-  lhs.badge == rhs.badge &&
-  lhs.activeTintColor == rhs.activeTintColor &&
-  lhs.hidden == rhs.hidden &&
-  lhs.testID == rhs.testID &&
-  lhs.role == rhs.role &&
-  lhs.preventsDefault == rhs.preventsDefault;
+  return lhs.key == rhs.key && lhs.title == rhs.title &&
+         lhs.sfSymbol == rhs.sfSymbol && lhs.badge == rhs.badge &&
+         lhs.activeTintColor == rhs.activeTintColor &&
+         lhs.hidden == rhs.hidden && lhs.testID == rhs.testID &&
+         lhs.role == rhs.role && lhs.preventsDefault == rhs.preventsDefault &&
+         lhs.searchable == rhs.searchable &&
+         lhs.searchablePrompt == rhs.searchablePrompt;
 }
 
 bool operator!=(const RNCTabViewItemsStruct& lhs, const RNCTabViewItemsStruct& rhs) {
@@ -176,14 +174,6 @@ using namespace facebook::react;
     _tabViewProvider.tabBarHidden = newViewProps.tabBarHidden;
   }
 
-  if (oldViewProps.searchable != newViewProps.searchable) {
-    _tabViewProvider.searchable = newViewProps.searchable;
-  }
-
-  if (oldViewProps.searchablePrompt != newViewProps.searchablePrompt) {
-    _tabViewProvider.searchablePrompt = RCTNSStringFromString(newViewProps.searchablePrompt);
-  }
-
   [super updateProps:props oldProps:oldProps];
 }
 
@@ -191,16 +181,19 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
   NSMutableArray<TabInfo *> *result = [NSMutableArray array];
 
   for (const auto& item : items) {
-    auto tabInfo = [[TabInfo alloc] initWithKey:RCTNSStringFromString(item.key)
-                                          title:RCTNSStringFromString(item.title)
-                                          badge:RCTNSStringFromStringNilIfEmpty(item.badge)
-                                       sfSymbol:RCTNSStringFromStringNilIfEmpty(item.sfSymbol)
-                                activeTintColor:RCTUIColorFromSharedColor(item.activeTintColor)
-                                         hidden:item.hidden
-                                         testID:RCTNSStringFromStringNilIfEmpty(item.testID)
-                                         role:RCTNSStringFromStringNilIfEmpty(item.role)
-                              preventsDefault:item.preventsDefault
-    ];
+    auto tabInfo = [[TabInfo alloc]
+             initWithKey:RCTNSStringFromString(item.key)
+                   title:RCTNSStringFromString(item.title)
+                   badge:RCTNSStringFromStringNilIfEmpty(item.badge)
+                sfSymbol:RCTNSStringFromStringNilIfEmpty(item.sfSymbol)
+         activeTintColor:RCTUIColorFromSharedColor(item.activeTintColor)
+                  hidden:item.hidden
+                  testID:RCTNSStringFromStringNilIfEmpty(item.testID)
+                    role:RCTNSStringFromStringNilIfEmpty(item.role)
+         preventsDefault:item.preventsDefault
+              searchable:item.searchable
+        searchablePrompt:RCTNSStringFromStringNilIfEmpty(
+                             item.searchablePrompt)];
 
     [result addObject:tabInfo];
   }
@@ -289,5 +282,3 @@ Class<RCTComponentViewProtocol> RNCTabViewCls(void)
 }
 
 #endif // RCT_NEW_ARCH_ENABLED
-
-
