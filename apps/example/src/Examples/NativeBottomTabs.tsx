@@ -1,10 +1,10 @@
-import { Article } from '../Screens/Article';
-import { Albums } from '../Screens/Albums';
-import { Contacts } from '../Screens/Contacts';
-import { Chat } from '../Screens/Chat';
 import { createNativeBottomTabNavigator } from '@bottom-tabs/react-navigation';
-import { Platform } from 'react-native';
 import { useState } from 'react';
+import { Platform } from 'react-native';
+import { Albums } from '../Screens/Albums';
+import { Article } from '../Screens/Article';
+import { Chat } from '../Screens/Chat';
+import { Contacts } from '../Screens/Contacts';
 
 const Tab = createNativeBottomTabNavigator();
 
@@ -32,6 +32,12 @@ function NativeBottomTabs() {
             `${Platform.OS}: Long press detected on tab with key ${data.target} at the navigator level.`
           );
         },
+      }}
+      onSearchTextChange={(key, text) => {
+        console.log('onSearchTextChange', key, text);
+      }}
+      onSearchSubmit={(key, text) => {
+        console.log('onSearchSubmit', key, text);
       }}
     >
       <Tab.Screen
@@ -87,6 +93,8 @@ function NativeBottomTabs() {
         options={{
           tabBarIcon: () => require('../../assets/icons/chat_dark.png'),
           tabBarActiveTintColor: 'white',
+          searchable: true,
+          searchablePrompt: 'Search for a chat',
         }}
       />
     </Tab.Navigator>
