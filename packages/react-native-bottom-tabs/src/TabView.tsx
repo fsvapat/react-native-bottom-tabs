@@ -124,15 +124,11 @@ interface Props<Route extends BaseRoute> {
   /**
    * Callback when search text changes (iOS 26+)
    */
-  onSearchTextChange?: (text: string) => void;
+  onSearchTextChange?: (key: string, text: string) => void;
   /**
    * Callback when search is submitted (iOS 26+)
    */
-  onSearchSubmit?: (text: string) => void;
-  /**
-   * Callback when search is dismissed (iOS 26+)
-   */
-  onSearchDismiss?: () => void;
+  onSearchSubmit?: (key: string, text: string) => void;
   /**
    * Get icon for the tab, uses `route.focusedIcon` by default.
    */
@@ -235,7 +231,6 @@ const TabView = <Route extends BaseRoute>({
   getSearchablePrompt = ({ route }: { route: Route }) => route.searchablePrompt,
   onSearchTextChange,
   onSearchSubmit,
-  onSearchDismiss,
   hapticFeedbackEnabled = false,
   // Android's native behavior is to show labels when there are less than 4 tabs. We leave it as undefined to use the platform default behavior.
   labeled = Platform.OS !== 'android' ? true : undefined,
@@ -376,22 +371,18 @@ const TabView = <Route extends BaseRoute>({
   );
 
   const handleSearchTextChange = React.useCallback(
-    ({ nativeEvent: { text } }: { nativeEvent: OnSearchTextChange }) => {
-      onSearchTextChange?.(text);
+    ({ nativeEvent: { key, text } }: { nativeEvent: OnSearchTextChange }) => {
+      onSearchTextChange?.(key, text);
     },
     [onSearchTextChange]
   );
 
   const handleSearchSubmit = React.useCallback(
-    ({ nativeEvent: { text } }: { nativeEvent: OnSearchSubmit }) => {
-      onSearchSubmit?.(text);
+    ({ nativeEvent: { key, text } }: { nativeEvent: OnSearchSubmit }) => {
+      onSearchSubmit?.(key, text);
     },
     [onSearchSubmit]
   );
-
-  const handleSearchDismiss = React.useCallback(() => {
-    onSearchDismiss?.();
-  }, [onSearchDismiss]);
 
   useLayoutEffect(() => {
     // If we are rendering a custom tab bar, we need to measure it to set the tab bar height.
@@ -419,7 +410,6 @@ const TabView = <Route extends BaseRoute>({
         onNativeLayout={handleNativeLayout}
         onSearchTextChange={handleSearchTextChange}
         onSearchSubmit={handleSearchSubmit}
-        onSearchDismiss={handleSearchDismiss}
         hapticFeedbackEnabled={hapticFeedbackEnabled}
         activeTintColor={activeTintColor}
         inactiveTintColor={inactiveTintColor}

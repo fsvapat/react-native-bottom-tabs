@@ -49,9 +49,8 @@ public final class TabInfo: NSObject {
   func onLongPress(key: String, reactTag: NSNumber?)
   func onTabBarMeasured(height: Int, reactTag: NSNumber?)
   func onLayout(size: CGSize, reactTag: NSNumber?)
-  func onSearchTextChange(text: String, reactTag: NSNumber?)
-  func onSearchSubmit(text: String, reactTag: NSNumber?)
-  func onSearchDismiss(reactTag: NSNumber?)
+  func onSearchTextChange(key: String, text: String, reactTag: NSNumber?)
+  func onSearchSubmit(key: String, text: String, reactTag: NSNumber?)
 }
 
 @objc public class TabViewProvider: PlatformView {
@@ -69,7 +68,6 @@ public final class TabInfo: NSObject {
   @objc var onNativeLayout: RCTDirectEventBlock?
   @objc var onSearchTextChange: RCTDirectEventBlock?
   @objc var onSearchSubmit: RCTDirectEventBlock?
-  @objc var onSearchDismiss: RCTDirectEventBlock?
 
   @objc public var icons: NSArray? {
     didSet {
@@ -212,12 +210,10 @@ public final class TabInfo: NSObject {
       self.delegate?.onLayout(size: size, reactTag: self.reactTag)
     } onTabBarMeasured: { height in
       self.delegate?.onTabBarMeasured(height: height, reactTag: self.reactTag)
-    } onSearchTextChange: { text in
-      self.delegate?.onSearchTextChange(text: text, reactTag: self.reactTag)
-    } onSearchSubmit: { text in
-      self.delegate?.onSearchSubmit(text: text, reactTag: self.reactTag)
-    } onSearchDismiss: {
-      self.delegate?.onSearchDismiss(reactTag: self.reactTag)
+    } onSearchTextChange: { key, text in
+      self.delegate?.onSearchTextChange(key: key, text: text, reactTag: self.reactTag)
+    } onSearchSubmit: { key, text in
+      self.delegate?.onSearchSubmit(key: key, text: text, reactTag: self.reactTag)
     })
 
     if let hostingController = self.hostingController, let parentViewController = reactViewController() {

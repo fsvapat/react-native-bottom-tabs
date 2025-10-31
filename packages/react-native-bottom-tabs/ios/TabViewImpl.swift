@@ -26,7 +26,6 @@ struct TabViewImpl: View {
         },
         onSearchTextChange: onSearchTextChange,
         onSearchSubmit: onSearchSubmit,
-        onSearchDismiss: onSearchDismiss
       )
     } else {
       LegacyTabView(
@@ -40,7 +39,6 @@ struct TabViewImpl: View {
         },
         onSearchTextChange: onSearchTextChange,
         onSearchSubmit: onSearchSubmit,
-        onSearchDismiss: onSearchDismiss
       )
     }
   }
@@ -49,9 +47,8 @@ struct TabViewImpl: View {
   var onLongPress: (_ key: String) -> Void
   var onLayout: (_ size: CGSize) -> Void
   var onTabBarMeasured: (_ height: Int) -> Void
-  var onSearchTextChange: (_ text: String) -> Void
-  var onSearchSubmit: (_ text: String) -> Void
-  var onSearchDismiss: () -> Void
+  var onSearchTextChange: (_ key: String, _ text: String) -> Void
+  var onSearchSubmit: (_ key: String, _ text: String) -> Void
 
   var body: some View {
     tabContent
@@ -339,19 +336,17 @@ extension View {
 
   @ViewBuilder
   func searchableModifier(
-    searchable: Bool,
-    searchablePrompt: String?,
-    onTextChange: @escaping (String) -> Void,
-    onSubmit: @escaping (String) -> Void,
-    onDismiss: @escaping () -> Void
+    tabData: TabInfo,
+    onTextChange: @escaping (String, String) -> Void,
+    onSubmit: @escaping (String, String) -> Void,
   ) -> some View {
     if #available(iOS 26.0, *) {
-      if searchable {
+      if tabData.searchable {
         SearchableModifierView(
-          prompt: searchablePrompt,
+          key: tabData.key,
+          prompt: tabData.searchablePrompt,
           onTextChange: onTextChange,
-          onSubmit: onSubmit,
-          onDismiss: onDismiss
+          onSubmit: onSubmit
         ) {
           self
         }
@@ -365,10 +360,10 @@ extension View {
 }
 
 struct SearchableModifierView<Content: View>: View {
+  let key: String
   let prompt: String?
-  let onTextChange: (String) -> Void
-  let onSubmit: (String) -> Void
-  let onDismiss: () -> Void
+  let onTextChange: (String, String) -> Void
+  let onSubmit: (String, String) -> Void
   let content: () -> Content
 
   @State private var searchText: String = ""
@@ -382,16 +377,16 @@ struct SearchableModifierView<Content: View>: View {
                 get: { searchText },
                 set: { newValue in
                     searchText = newValue
-                    onTextChange(newValue)
+                    onTextChange(key, newValue)
                 }
             ),
             prompt: prompt.map { Text($0) }
           )
           .onSubmit(of: .search) {
-              onSubmit(searchText)
+              onSubmit(key, searchText)
           }
       } else {
-          // Fallback on earlier versions
+          // no op
       }
   }
 }

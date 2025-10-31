@@ -249,28 +249,27 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
   }
 }
 
-- (void)onSearchTextChangeWithText:(NSString *)text reactTag:(NSNumber *)reactTag {
+- (void)onSearchTextChangeWithKey:(NSString *)key
+                             text:(NSString *)text
+                         reactTag:(NSNumber *)reactTag {
   auto eventEmitter = std::static_pointer_cast<const RNCTabViewEventEmitter>(_eventEmitter);
   if (eventEmitter) {
     eventEmitter->onSearchTextChange(RNCTabViewEventEmitter::OnSearchTextChange{
-      .text = [text cStringUsingEncoding:kCFStringEncodingUTF8]
+        .key = [key cStringUsingEncoding:kCFStringEncodingUTF8],
+        .text = [text cStringUsingEncoding:kCFStringEncodingUTF8]
     });
   }
 }
 
-- (void)onSearchSubmitWithText:(NSString *)text reactTag:(NSNumber *)reactTag {
+- (void)onSearchSubmitWithKey:(NSString *)key
+                         text:(NSString *)text
+                     reactTag:(NSNumber *)reactTag {
   auto eventEmitter = std::static_pointer_cast<const RNCTabViewEventEmitter>(_eventEmitter);
   if (eventEmitter) {
     eventEmitter->onSearchSubmit(RNCTabViewEventEmitter::OnSearchSubmit{
+      .key = [key cStringUsingEncoding:kCFStringEncodingUTF8],
       .text = [text cStringUsingEncoding:kCFStringEncodingUTF8]
     });
-  }
-}
-
-- (void)onSearchDismissWithReactTag:(NSNumber *)reactTag {
-  auto eventEmitter = std::static_pointer_cast<const RNCTabViewEventEmitter>(_eventEmitter);
-  if (eventEmitter) {
-    eventEmitter->onSearchDismiss(RNCTabViewEventEmitter::OnSearchDismiss{});
   }
 }
 
@@ -282,3 +281,4 @@ Class<RCTComponentViewProtocol> RNCTabViewCls(void)
 }
 
 #endif // RCT_NEW_ARCH_ENABLED
+

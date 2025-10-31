@@ -6,9 +6,8 @@ struct LegacyTabView: AnyTabView {
   var onLayout: (CGSize) -> Void
   var onSelect: (String) -> Void
   var updateTabBarAppearance: () -> Void
-  var onSearchTextChange: (String) -> Void
-  var onSearchSubmit: (String) -> Void
-  var onSearchDismiss: () -> Void
+  var onSearchTextChange: (String, String) -> Void
+  var onSearchSubmit: (String, String) -> Void
 
   @ViewBuilder
   var body: some View {
@@ -44,11 +43,9 @@ struct LegacyTabView: AnyTabView {
         RepresentableView(view: child)
           .ignoresSafeArea(.container, edges: .all)
           .searchableModifier(
-            searchable: tabData.searchable,
-            searchablePrompt: tabData.searchablePrompt,
+            tabData: tabData,
             onTextChange: onSearchTextChange,
-            onSubmit: onSearchSubmit,
-            onDismiss: onSearchDismiss
+            onSubmit: onSearchSubmit
           )
           .tabItem {
             TabItem(

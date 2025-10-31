@@ -23,17 +23,13 @@ export type OnNativeLayout = Readonly<{
 }>;
 
 export type OnSearchTextChange = Readonly<{
-  text: string;
   key: string;
+  text: string;
 }>;
 
 export type OnSearchSubmit = Readonly<{
+  key: string;
   text: string;
-  key: string;
-}>;
-
-export type OnSearchDismiss = Readonly<{
-  key: string;
 }>;
 
 export type TabViewItems = ReadonlyArray<{
@@ -76,7 +72,6 @@ export interface TabViewProps extends ViewProps {
   fontSize?: Int32;
   onSearchTextChange?: DirectEventHandler<OnSearchTextChange>;
   onSearchSubmit?: DirectEventHandler<OnSearchSubmit>;
-  onSearchDismiss?: DirectEventHandler<OnSearchDismiss>;
 }
 
 export default codegenNativeComponent<TabViewProps>('RNCTabView', {

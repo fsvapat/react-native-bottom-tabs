@@ -110,12 +110,14 @@ export type NativeBottomTabNavigationOptions = {
    * Whether to prevent default action of the tab. Defaults to `false`.
    */
   preventsDefault?: boolean;
-
+  /**
+   * Whether to enable searchable functionality (iOS 26+).
+   */
   searchable?: boolean;
+  /**
+   * Placeholder text for the search field (iOS 26+).
+   */
   searchablePrompt?: string;
-  onSearchTextChange?: (text: string) => void;
-  onSearchSubmit?: (text: string) => void;
-  onSearchDismiss?: () => void;
 };
 
 export type NativeBottomTabDescriptor = Descriptor<
@@ -159,9 +161,12 @@ export type NativeBottomTabNavigationConfig = Partial<
   >
 > & {
   tabBar?: (props: BottomTabBarProps) => React.ReactNode;
-  searchable?: boolean;
-  searchablePrompt?: string;
-  onSearchTextChange?: (text: string) => void;
-  onSearchSubmit?: (text: string) => void;
-  onSearchDismiss?: () => void;
+  /**
+   * Callback when search text changes (iOS 26+).
+   */
+  onSearchTextChange?: (key: string, text: string) => void;
+  /**
+   * Callback when search is submitted (iOS 26+).
+   */
+  onSearchSubmit?: (key: string, text: string) => void;
 };
