@@ -26,6 +26,8 @@ struct TabViewImpl: View {
         },
         onSearchTextChange: onSearchTextChange,
         onSearchSubmit: onSearchSubmit,
+        onSearchFocus: onSearchFocus,
+        onSearchBlur: onSearchBlur,
       )
     } else {
       LegacyTabView(
@@ -39,6 +41,8 @@ struct TabViewImpl: View {
         },
         onSearchTextChange: onSearchTextChange,
         onSearchSubmit: onSearchSubmit,
+        onSearchFocus: onSearchFocus,
+        onSearchBlur: onSearchBlur,
       )
     }
   }
@@ -49,6 +53,8 @@ struct TabViewImpl: View {
   var onTabBarMeasured: (_ height: Int) -> Void
   var onSearchTextChange: (_ key: String, _ text: String) -> Void
   var onSearchSubmit: (_ key: String, _ text: String) -> Void
+  var onSearchFocus: (_ key: String) -> Void
+  var onSearchBlur: (_ key: String) -> Void
 
   var body: some View {
     tabContent
@@ -339,8 +345,8 @@ extension View {
     tabData: TabInfo,
     onTextChange: @escaping (String, String) -> Void,
     onSubmit: @escaping (String, String) -> Void,
-    onBlur: @escaping () -> Void,
-    onFocus: @escaping () -> Void
+    onBlur: @escaping (String) -> Void,
+    onFocus: @escaping (String) -> Void
   ) -> some View {
     if #available(iOS 26.0, *) {
       if tabData.searchable {
@@ -368,8 +374,8 @@ struct SearchableModifierView<Content: View>: View {
   let prompt: String?
   let onTextChange: (String, String) -> Void
   let onSubmit: (String, String) -> Void
-  let onBlur: () -> Void
-  let onFocus: () -> Void
+  let onBlur: (String) -> Void
+  let onFocus: (String) -> Void
   let content: () -> Content
 
   @State private var searchText: String = ""
@@ -392,9 +398,9 @@ struct SearchableModifierView<Content: View>: View {
           .focused($searchIsFocused)
           .onChange(of: searchIsFocused) { isFocused in
             if isFocused {
-              onFocus()
+              onFocus(key)
             } else {
-              onBlur()
+              onBlur(key)
             }
           }
           .onSubmit(of: .search) {
