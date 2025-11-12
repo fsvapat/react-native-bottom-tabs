@@ -382,7 +382,7 @@ struct SearchableModifierView<Content: View>: View {
   @FocusState private var searchIsFocused: Bool
 
   var body: some View {
-      if #available(iOS 16.0, *) {
+      if #available(iOS 18.0, *) {
           NavigationStack {
               content()
           }.searchable(
@@ -395,7 +395,7 @@ struct SearchableModifierView<Content: View>: View {
             ),
             prompt: prompt.map { Text($0) }
           )
-          .focused($searchIsFocused)
+          .searchFocused($searchIsFocused)
           .onChange(of: searchIsFocused) { isFocused in
             if isFocused {
               onFocus(key)
