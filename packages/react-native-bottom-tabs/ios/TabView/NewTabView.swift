@@ -40,8 +40,8 @@ struct NewTabView: AnyTabView {
                   tabData: tabData,
                   onTextChange: onSearchTextChange,
                   onSubmit: onSearchSubmit,
-                  onFocus: onSearchFocus,
-                  onBlur: onSearchBlur
+                  onBlur: onSearchBlur,
+                  onFocus: onSearchFocus
                 )
             } label: {
               TabItem(
