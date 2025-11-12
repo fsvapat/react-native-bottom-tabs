@@ -51,6 +51,8 @@ public final class TabInfo: NSObject {
   func onLayout(size: CGSize, reactTag: NSNumber?)
   func onSearchTextChange(key: String, text: String, reactTag: NSNumber?)
   func onSearchSubmit(key: String, text: String, reactTag: NSNumber?)
+  func onSearchFocus(key: String, reactTag: NSNumber?)
+  func onSearchBlur(key: String, reactTag: NSNumber?)
 }
 
 @objc public class TabViewProvider: PlatformView {
@@ -214,6 +216,10 @@ public final class TabInfo: NSObject {
       self.delegate?.onSearchTextChange(key: key, text: text, reactTag: self.reactTag)
     } onSearchSubmit: { key, text in
       self.delegate?.onSearchSubmit(key: key, text: text, reactTag: self.reactTag)
+    } onSearchFocus: { key in
+      self.delegate?.onSearchFocus(key: key, reactTag: self.reactTag)
+    } onSearchBlur: { key in
+      self.delegate?.onSearchBlur(key: key, reactTag: self.reactTag)
     })
 
     if let hostingController = self.hostingController, let parentViewController = reactViewController() {

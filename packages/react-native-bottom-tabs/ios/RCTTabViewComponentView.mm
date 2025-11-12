@@ -273,6 +273,23 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
   }
 }
 
+- (void)onSearchFocusWithKey:(NSString *)key reactTag:(NSNumber *)reactTag {
+  auto eventEmitter = std::static_pointer_cast<const RNCTabViewEventEmitter>(_eventEmitter);
+  if (eventEmitter) {
+    eventEmitter->onSearchFocus(RNCTabViewEventEmitter::OnSearchFocus{
+      .key = [key cStringUsingEncoding:kCFStringEncodingUTF8]
+    });
+  }
+}
+
+- (void)onSearchBlurWithKey:(NSString *)key reactTag:(NSNumber *)reactTag {
+  auto eventEmitter = std::static_pointer_cast<const RNCTabViewEventEmitter>(_eventEmitter);
+  if (eventEmitter) {
+    eventEmitter->onSearchBlur(RNCTabViewEventEmitter::OnSearchBlur{
+      .key = [key cStringUsingEncoding:kCFStringEncodingUTF8]
+    });
+  }
+}
 @end
 
 Class<RCTComponentViewProtocol> RNCTabViewCls(void)
@@ -281,4 +298,3 @@ Class<RCTComponentViewProtocol> RNCTabViewCls(void)
 }
 
 #endif // RCT_NEW_ARCH_ENABLED
-

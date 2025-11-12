@@ -9,6 +9,8 @@ struct NewTabView: AnyTabView {
   var updateTabBarAppearance: () -> Void
   var onSearchTextChange: (String, String) -> Void
   var onSearchSubmit: (String, String) -> Void
+  var onSearchFocus: (String) -> Void
+  var onSearchBlur: (String) -> Void
 
   @ViewBuilder
   var body: some View {
@@ -38,6 +40,8 @@ struct NewTabView: AnyTabView {
                   tabData: tabData,
                   onTextChange: onSearchTextChange,
                   onSubmit: onSearchSubmit,
+                  onFocus: onSearchFocus,
+                  onBlur: onSearchBlur
                 )
             } label: {
               TabItem(

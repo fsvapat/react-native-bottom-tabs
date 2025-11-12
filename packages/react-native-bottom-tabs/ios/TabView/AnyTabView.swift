@@ -6,4 +6,6 @@ public protocol AnyTabView: View {
   var updateTabBarAppearance: () -> Void { get }
   var onSearchTextChange: (_ key: String, _ text: String) -> Void { get }
   var onSearchSubmit: (_ key: String, _ text: String) -> Void { get }
+  var onSearchFocus: (_ key: String) -> Void { get }
+  var onSearchBlur: (_ key: String) -> Void { get }
 }

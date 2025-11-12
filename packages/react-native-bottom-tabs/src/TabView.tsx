@@ -13,6 +13,8 @@ import {
 import type {
   OnNativeLayout,
   OnPageSelectedEventData,
+  OnSearchBlur,
+  OnSearchFocus,
   OnSearchSubmit,
   OnSearchTextChange,
   OnTabBarMeasured,
@@ -130,6 +132,14 @@ interface Props<Route extends BaseRoute> {
    */
   onSearchSubmit?: (key: string, text: string) => void;
   /**
+   * Callback when search is focused (iOS 26+)
+   */
+  onSearchFocus?: (key: string) => void;
+  /**
+   * Callback when search is blurred (iOS 26+)
+   */
+  onSearchBlur?: (key: string) => void;
+  /**
    * Get icon for the tab, uses `route.focusedIcon` by default.
    */
   getIcon?: (props: {
@@ -231,6 +241,8 @@ const TabView = <Route extends BaseRoute>({
   getSearchablePrompt = ({ route }: { route: Route }) => route.searchablePrompt,
   onSearchTextChange,
   onSearchSubmit,
+  onSearchFocus,
+  onSearchBlur,
   hapticFeedbackEnabled = false,
   // Android's native behavior is to show labels when there are less than 4 tabs. We leave it as undefined to use the platform default behavior.
   labeled = Platform.OS !== 'android' ? true : undefined,
@@ -384,6 +396,20 @@ const TabView = <Route extends BaseRoute>({
     [onSearchSubmit]
   );
 
+  const handleSearchFocus = React.useCallback(
+    ({ nativeEvent: { key } }: { nativeEvent: OnSearchFocus }) => {
+      onSearchFocus?.(key);
+    },
+    [onSearchFocus]
+  );
+
+  const handleSearchBlur = React.useCallback(
+    ({ nativeEvent: { key } }: { nativeEvent: OnSearchBlur }) => {
+      onSearchBlur?.(key);
+    },
+    [onSearchBlur]
+  );
+
   useLayoutEffect(() => {
     // If we are rendering a custom tab bar, we need to measure it to set the tab bar height.
     if (renderCustomTabBar && customTabBarWrapperRef.current) {
@@ -410,6 +436,8 @@ const TabView = <Route extends BaseRoute>({
         onNativeLayout={handleNativeLayout}
         onSearchTextChange={handleSearchTextChange}
         onSearchSubmit={handleSearchSubmit}
+        onSearchFocus={handleSearchFocus}
+        onSearchBlur={handleSearchBlur}
         hapticFeedbackEnabled={hapticFeedbackEnabled}
         activeTintColor={activeTintColor}
         inactiveTintColor={inactiveTintColor}

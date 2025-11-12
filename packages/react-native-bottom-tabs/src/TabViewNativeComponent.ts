@@ -32,6 +32,14 @@ export type OnSearchSubmit = Readonly<{
   text: string;
 }>;
 
+export type OnSearchFocus = Readonly<{
+  key: string;
+}>;
+
+export type OnSearchBlur = Readonly<{
+  key: string;
+}>;
+
 export type TabViewItems = ReadonlyArray<{
   key: string;
   title: string;
@@ -72,6 +80,8 @@ export interface TabViewProps extends ViewProps {
   fontSize?: Int32;
   onSearchTextChange?: DirectEventHandler<OnSearchTextChange>;
   onSearchSubmit?: DirectEventHandler<OnSearchSubmit>;
+  onSearchFocus?: DirectEventHandler<OnSearchFocus>;
+  onSearchBlur?: DirectEventHandler<OnSearchBlur>;
 }
 
 export default codegenNativeComponent<TabViewProps>('RNCTabView', {
