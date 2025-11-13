@@ -15,7 +15,7 @@ public final class TabInfo: NSObject {
   public let preventsDefault: Bool
   public let searchable: Bool
   public let searchablePrompt: String?
-  public var dismissSearch: (() -> Void)?
+  public var blurSearch: (() -> Void)?
 
   public init(
     key: String,
@@ -29,7 +29,7 @@ public final class TabInfo: NSObject {
     preventsDefault: Bool = false,
     searchable: Bool = false,
     searchablePrompt: String?,
-    dismissSearch: (() -> Void)? = nil
+    blurSearch: (() -> Void)? = nil
   ) {
     self.key = key
     self.title = title
@@ -42,7 +42,7 @@ public final class TabInfo: NSObject {
     self.preventsDefault = preventsDefault
     self.searchable = searchable
     self.searchablePrompt = searchablePrompt
-    self.dismissSearch = dismissSearch
+    self.blurSearch = blurSearch
     super.init()
   }
 }
@@ -286,12 +286,11 @@ public final class TabInfo: NSObject {
     }
   }
 
-  @objc public func dismissSearch() {
-    // Call the dismiss function for the currently selected tab
+  @objc public func blurSearch() {
     if let selectedPage = props.selectedPage,
        let tabData = props.items.findByKey(selectedPage),
-       let dismissHandler = tabData.dismissSearch {
-        dismissHandler()
+       let blurSearchHandler = tabData.blurSearch {
+        blurSearchHandler()
       }
   }
 }

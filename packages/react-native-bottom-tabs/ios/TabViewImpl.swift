@@ -384,23 +384,20 @@ struct SearchableModifierView<Content: View>: View {
           NavigationStack {
               content()
           }.searchable(
-            text: Binding(
-                get: { searchText },
-                set: { newValue in
-                    searchText = newValue
-                    onTextChange(tabData.key, newValue)
-                }
-            ),
+            text: $searchText,
             prompt: tabData.searchablePrompt.map { Text($0) }
           )
           .searchFocused($searchIsFocused)
           .onAppear {
-              tabData.dismissSearch = {
+              tabData.blurSearch = {
                   searchIsFocused = false
               }
           }
           .onDisappear {
-              tabData.dismissSearch = nil
+              tabData.blurSearch = nil
+          }
+          onChange(of: searchText) { newValue in
+              onTextChange(tabData.key, newValue)
           }
           .onChange(of: searchIsFocused) { isFocused in
             if isFocused {
@@ -413,7 +410,7 @@ struct SearchableModifierView<Content: View>: View {
               onSubmit(tabData.key, searchText)
           }
       } else {
-          // no op
+        content()
       }
   }
 }

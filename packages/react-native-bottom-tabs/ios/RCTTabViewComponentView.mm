@@ -193,7 +193,7 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
          preventsDefault:item.preventsDefault
               searchable:item.searchable
         searchablePrompt:RCTNSStringFromStringNilIfEmpty(item.searchablePrompt)
-           dismissSearch:nil];
+              blurSearch:nil];
 
     [result addObject:tabInfo];
   }
@@ -292,13 +292,13 @@ NSArray* convertItemsToArray(const std::vector<RNCTabViewItemsStruct>& items) {
 }
 
 - (void)handleCommand:(const NSString *)commandName args:(const NSArray *)args {
-  if ([commandName isEqualToString:@"dismissSearch"]) {
-    [self dismissSearch];
+  if ([commandName isEqualToString:@"blurSearch"]) {
+    [self blurSearch];
   }
 }
 
-- (void)dismissSearch {
-  [_tabViewProvider dismissSearch];
+- (void)blurSearch {
+  [_tabViewProvider blurSearch];
 }
 @end
 
