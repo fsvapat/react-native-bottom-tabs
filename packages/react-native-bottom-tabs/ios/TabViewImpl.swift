@@ -351,8 +351,7 @@ extension View {
     if #available(iOS 26.0, *) {
       if tabData.searchable {
         SearchableModifierView(
-          key: tabData.key,
-          prompt: tabData.searchablePrompt,
+          tabData: tabData,
           onTextChange: onTextChange,
           onSubmit: onSubmit,
           onBlur: onBlur,
@@ -370,8 +369,7 @@ extension View {
 }
 
 struct SearchableModifierView<Content: View>: View {
-  let key: String
-  let prompt: String?
+  let tabData: TabInfo
   let onTextChange: (String, String) -> Void
   let onSubmit: (String, String) -> Void
   let onBlur: (String) -> Void
@@ -390,21 +388,29 @@ struct SearchableModifierView<Content: View>: View {
                 get: { searchText },
                 set: { newValue in
                     searchText = newValue
-                    onTextChange(key, newValue)
+                    onTextChange(tabData.key, newValue)
                 }
             ),
-            prompt: prompt.map { Text($0) }
+            prompt: tabData.searchablePrompt.map { Text($0) }
           )
           .searchFocused($searchIsFocused)
+          .onAppear {
+              tabData.dismissSearch = {
+                  searchIsFocused = false
+              }
+          }
+          .onDisappear {
+              tabData.dismissSearch = nil
+          }
           .onChange(of: searchIsFocused) { isFocused in
             if isFocused {
-              onFocus(key)
+              onFocus(tabData.key)
             } else {
-              onBlur(key)
+              onBlur(tabData.key)
             }
           }
           .onSubmit(of: .search) {
-              onSubmit(key, searchText)
+              onSubmit(tabData.key, searchText)
           }
       } else {
           // no op

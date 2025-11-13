@@ -9,9 +9,9 @@ export default TabView;
  * Utilities
  */
 export { SceneMap } from './SceneMap';
-export { useBottomTabBarHeight } from './utils/useBottomTabBarHeight';
+export { Search } from './Search';
 export { BottomTabBarHeightContext } from './utils/BottomTabBarHeightContext';
-
+export { useBottomTabBarHeight } from './utils/useBottomTabBarHeight';
 /**
  * Types
  */
