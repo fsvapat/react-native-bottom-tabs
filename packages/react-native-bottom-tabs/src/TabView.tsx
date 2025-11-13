@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import type { HostComponent } from 'react-native';
 import {
   type ColorValue,
@@ -27,7 +27,6 @@ import { BottomTabBarHeightContext } from './utils/BottomTabBarHeightContext';
 import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';
 import useLatestCallback from 'use-latest-callback';
 import DelayedFreeze from './DelayedFreeze';
-import { Search } from './Search';
 import NativeTabView from './TabViewNativeComponent';
 import type { AppleIcon, BaseRoute, NavigationState, TabRole } from './types';
 
@@ -423,14 +422,6 @@ const TabView = <Route extends BaseRoute>({
 
   const nativeTabViewRef =
     useRef<React.ElementRef<HostComponent<typeof NativeTabView>>>(null);
-
-  // Register/unregister with Search singleton
-  useEffect(() => {
-    Search.registerTabView(nativeTabViewRef.current);
-    return () => {
-      Search.registerTabView(null);
-    };
-  }, []);
 
   return (
     <BottomTabBarHeightContext.Provider value={tabBarHeight}>
