@@ -392,9 +392,13 @@ struct SearchableModifierView<Content: View>: View {
               tabData.blurSearch = {
                   searchIsFocused = false
               }
+              tabData.setSearchText = { text in
+                  searchText = text
+              }
           }
           .onDisappear {
               tabData.blurSearch = nil
+              tabData.setSearchText = nil
           }
           .onChange(of: searchText) { newValue in
               onTextChange(tabData.key, newValue)

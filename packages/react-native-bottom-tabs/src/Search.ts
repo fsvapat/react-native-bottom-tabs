@@ -34,6 +34,16 @@ class SearchManager {
       Commands.blurSearch(this.activeTabViewRef);
     }
   }
+
+  /**
+   * Set the search text for the currently active tab.
+   * Only works if there's an active TabView with a searchable tab.
+   */
+  setText(text: string) {
+    if (this.activeTabViewRef) {
+      Commands.setSearchText(this.activeTabViewRef, text);
+    }
+  }
 }
 
 export const Search = new SearchManager();

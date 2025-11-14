@@ -9,7 +9,7 @@ interface NativeCommands {
   // submitSearch: () => void;
   // clearSearch: () => void;
 
-  // setSearchText: (text: string) => void;
+  setSearchText: <T>(ref: NativeComponentRef<T>, text: string) => void;
   // getSearchText: () => string;
   // getSearchTextLength: () => number;
   // getSearchTextPosition: () => number;
@@ -17,5 +17,5 @@ interface NativeCommands {
 }
 
 export default codegenNativeCommands<NativeCommands>({
-  supportedCommands: ['blurSearch'],
+  supportedCommands: ['blurSearch', 'setSearchText'],
 });

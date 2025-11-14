@@ -16,6 +16,7 @@ public final class TabInfo: NSObject {
   public let searchable: Bool
   public let searchablePrompt: String?
   public var blurSearch: (() -> Void)?
+  public var setSearchText: ((String) -> Void)?
 
   public init(
     key: String,
@@ -29,7 +30,8 @@ public final class TabInfo: NSObject {
     preventsDefault: Bool = false,
     searchable: Bool = false,
     searchablePrompt: String?,
-    blurSearch: (() -> Void)? = nil
+    blurSearch: (() -> Void)? = nil,
+    setSearchText: ((String) -> Void)? = nil
   ) {
     self.key = key
     self.title = title
@@ -43,6 +45,7 @@ public final class TabInfo: NSObject {
     self.searchable = searchable
     self.searchablePrompt = searchablePrompt
     self.blurSearch = blurSearch
+    self.setSearchText = setSearchText
     super.init()
   }
 }
@@ -291,6 +294,14 @@ public final class TabInfo: NSObject {
        let tabData = props.items.findByKey(selectedPage),
        let blurSearchHandler = tabData.blurSearch {
         blurSearchHandler()
+      }
+  }
+
+  @objc public func setSearchText(_ text: String) {
+    if let selectedPage = props.selectedPage,
+       let tabData = props.items.findByKey(selectedPage),
+       let setSearchTextHandler = tabData.setSearchText {
+        setSearchTextHandler(text)
       }
   }
 }
